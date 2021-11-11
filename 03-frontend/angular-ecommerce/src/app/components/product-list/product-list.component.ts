@@ -10,34 +10,55 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductListComponent implements OnInit {
 
-  products?:Product[];
-  currentCategoryId?:number;
-  currentCategoryName:string;
-  constructor( private productService: ProductService ,private route:ActivatedRoute) { }
+  products: Product[];
+  currentCategoryId?: number;
+  currentCategoryName: string;
+  searchMode: boolean;
+  constructor(private productService: ProductService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( ()=>{
+    this.route.paramMap.subscribe(() => {
       this.listProducts();
     })
-    
+
 
   }
-  listProducts(){
-      //check if "id" is available
-      const hasCategoryId:boolean=this.route.snapshot.paramMap.has('id');
-      if (hasCategoryId){
-        // get the "id" param string. convert string to a numver using the "+" symbol
-        this.currentCategoryId=+this.route.snapshot.paramMap.get('id');
+  listProducts() {
 
-        //get the "name" param string
-        this.currentCategoryName=this.route.snapshot.paramMap.get('name');
+    this.searchMode = this.route.snapshot.paramMap.has('keyword');
+    if (this.searchMode) {
+      this.handleSearchProducts();
+    }
+    else {
+      this.handleListProducts();
+    }
+  }
+  handleSearchProducts(){
+    const theKeyword:string= this.route.snapshot.paramMap.get('keyword');
+    // search for the products using keyword
+    this.productService.searchProducts(theKeyword).subscribe(
+      data => {
+        this.products=data;
       }
-      else{
-        this.currentCategoryId=1;
-        this.currentCategoryName='Books';
-      }
+    );
+  }
+  handleListProducts() {
 
-    this.productService.getProductList(this.currentCategoryId).subscribe(data => {this.products = data;} )
+    //check if "id" is available
+    const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
+    if (hasCategoryId) {
+      // get the "id" param string. convert string to a numver using the "+" symbol
+      this.currentCategoryId = +this.route.snapshot.paramMap.get('id');
+
+      //get the "name" param string
+      this.currentCategoryName = this.route.snapshot.paramMap.get('name');
+    }
+    else {
+      this.currentCategoryId = 1;
+      this.currentCategoryName = 'Books';
+    }
+
+    this.productService.getProductList(this.currentCategoryId).subscribe(data => { this.products = data; })
   }
 
 }
