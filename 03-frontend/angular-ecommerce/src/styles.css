@@ -746,14 +746,14 @@ a.primary-btn{
     padding:7px 20px;
     text-align:center;
     display:inline-block;
-    color:#fff;
+    color:rgb(255, 255, 255);
     border-radius:2px;
     font-size:14px;
     margin-top:5px
 }
 a.primary-btn:hover{
     background:#0da8e4;
-    color:#fff
+    color:rgb(53, 149, 179)
 }
 
 .active-link {
@@ -944,7 +944,7 @@ footer ul li{
         margin-right:15px
     }
         .main-content.page-m{
-        padding:10% 0!important
+        padding:10% 30% 10% 5% 
     }
     .header-mobile .navbar-mobile{
         display:none;
