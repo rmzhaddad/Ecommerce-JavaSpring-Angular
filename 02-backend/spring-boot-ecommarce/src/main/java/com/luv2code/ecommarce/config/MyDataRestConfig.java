@@ -1,9 +1,6 @@
 package com.luv2code.ecommarce.config;
 
-import com.luv2code.ecommarce.entity.Country;
-import com.luv2code.ecommarce.entity.Product;
-import com.luv2code.ecommarce.entity.ProductCategory;
-import com.luv2code.ecommarce.entity.State;
+import com.luv2code.ecommarce.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +37,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(ProductCategory.class,config, theUnsupportedActions);
         disableHttpMethods(Country.class,config, theUnsupportedActions);
         disableHttpMethods(State.class,config, theUnsupportedActions);
+        disableHttpMethods(Order.class,config,theUnsupportedActions);
         exposeIds(config);
 
         //configure cors mapping

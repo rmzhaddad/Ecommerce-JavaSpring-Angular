@@ -12,7 +12,7 @@ export class CartService {
   cartItems: CartItem[] = [];
   totalPrice: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   totalQuantity: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  //storage:Storage=sessionStorage;
+  //storage:Storage=sessionStorage;  will lose cart itmes in once you exit the browser
   storage:Storage=localStorage;
 
   constructor() { 
