@@ -5,7 +5,7 @@ import com.luv2code.ecommarce.dto.PurchaseResponse;
 import com.luv2code.ecommarce.service.CheckoutService;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("https://localhost:4200")
 @RestController
 @RequestMapping("/api/checkout")
 public class CheckoutController {
