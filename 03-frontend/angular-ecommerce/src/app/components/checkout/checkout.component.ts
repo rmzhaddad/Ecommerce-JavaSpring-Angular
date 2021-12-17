@@ -42,6 +42,8 @@ export class CheckoutComponent implements OnInit {
   cardElement: any;
   displayError: any = "";
 
+  isDisabled:boolean=false;
+
   constructor(private formBuilder: FormBuilder,
               private luv2ShopFormService: Luv2ShopFormService,
               private cartService: CartService,
@@ -224,6 +226,8 @@ export class CheckoutComponent implements OnInit {
   }
 
   onSubmit() {
+
+
     console.log("Handling the submit button");
 
     if (this.checkoutFormGroup.invalid) {
@@ -278,6 +282,7 @@ export class CheckoutComponent implements OnInit {
     // compute payment info
     this.paymentInfo.amount = Math.round(this.totalPrice * 100);
     this.paymentInfo.currency = "CAD";
+    this.paymentInfo.receiptEmail=purchase.customer.email;
 
     console.log(`this.paymentInfo.amount:${this.paymentInfo.amount}`);
 
@@ -288,12 +293,25 @@ export class CheckoutComponent implements OnInit {
 
     if (!this.checkoutFormGroup.invalid && this.displayError.textContent === "") {
 
+      this.isDisabled=true;
+
       this.checkoutService.createPaymentIntent(this.paymentInfo).subscribe(
         (paymentIntentResponse) => {
           this.stripe.confirmCardPayment(paymentIntentResponse.client_secret,
             {
               payment_method: {
-                card: this.cardElement
+                card: this.cardElement,
+                billing_details:{
+                  email:purchase.customer.email,
+                  name:`${purchase.customer.firstName} ${purchase.customer.lastName}`,
+                  address:{
+                    line1:purchase.billingAddress.street,
+                    city:purchase.billingAddress.city,
+                    state:purchase.billingAddress.state,
+                    postal_code:purchase.billingAddress.zipCode,
+                    country:this.billingAddressCountry.value.code
+                  }
+                }
               }
             }, { handleActions: false })
           .then(function(result) {
@@ -308,9 +326,11 @@ export class CheckoutComponent implements OnInit {
 
                   // reset cart
                   this.resetCart();
+                  this.isDisabled = false;
                 },
                 error: err => {
                   alert(`There was an error: ${err.message}`);
+                  this.isdisable = false;
                 }
               })
             }            
